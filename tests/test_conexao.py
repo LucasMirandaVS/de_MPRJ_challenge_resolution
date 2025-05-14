@@ -1,6 +1,6 @@
 import requests
 
-url = "https://dados.mobilidade.rio/gps/brt"
-res = requests.get(url)
-
-print("Status da requisição:", res.status_code)
+def test_status_code_brt_api():
+    url = "https://dados.mobilidade.rio/gps/brt"
+    res = requests.get(url)
+    assert res.status_code == 200
