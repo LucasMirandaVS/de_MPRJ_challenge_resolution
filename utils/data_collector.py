@@ -3,7 +3,7 @@ import pandas as pd
 from datetime import datetime
 
 def get_brt_data():
-    url = "URL_DA_API_AQUI"  # substitua pela URL real
+    url = "https://dados.mobilidade.rio/gps/brt"  
     response = requests.get(url)
 
     if response.status_code != 200:
