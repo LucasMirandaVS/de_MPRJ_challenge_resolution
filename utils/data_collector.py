@@ -1,6 +1,8 @@
 import requests
 import pandas as pd
 from datetime import datetime
+from datetime import datetime, timezone
+
 
 def get_brt_data():
     url = "https://dados.mobilidade.rio/gps/brt"  
@@ -13,6 +15,6 @@ def get_brt_data():
     df = pd.DataFrame(data)
 
     # Adiciona timestamp de coleta
-    df['coleta_ts'] = datetime.utcnow()
+    df['coleta_ts'] = datetime.now(timezone.utc)
 
     return df
