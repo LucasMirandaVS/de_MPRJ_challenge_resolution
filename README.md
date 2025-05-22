@@ -5,4 +5,3 @@ Este projeto implementa uma pipeline de ingestão de dados em tempo real que con
 
 Construir uma pipeline de coleta contínua de dados de GPS dos ônibus BRT, com salvamento em formato CSV para posterior uso analítico. O foco está em garantir a captura dos dados minuto a minuto, de forma confiável e estruturada.
 
-Construir uma pipeline de coleta contínua de dados de GPS dos ônibus BRT, com salvamento em formato CSV para posterior uso analítico. O foco está em garantir a captura dos dados minuto a minuto, de forma confiável e estruturada.
