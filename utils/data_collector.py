@@ -1,20 +1,20 @@
 import requests
 import pandas as pd
-from datetime import datetime
 from datetime import datetime, timezone
 
-
 def get_brt_data():
-    url = "https://dados.mobilidade.rio/gps/brt"  
+    url = "https://dados.mobilidade.rio/gps/brt"
     response = requests.get(url)
 
     if response.status_code != 200:
-        raise Exception(f"Erro na API: {response.status_code}")
+        raise Exception(f"Erro ao acessar {url} - Código: {response.status_code}")
 
     data = response.json()
-    df = pd.DataFrame(data)
 
-    # Adiciona timestamp de coleta
+    if not data:
+        raise ValueError("A resposta da API está vazia ou malformada.")
+
+    df = pd.DataFrame(data)
     df['coleta_ts'] = datetime.now(timezone.utc)
 
     return df
