@@ -1,20 +1,28 @@
 import requests
 import pandas as pd
 from datetime import datetime, timezone
+from utils.logger import logger
+from config.settings import BRT_API_URL
+from requests.exceptions import RequestException
 
 def get_brt_data():
-    url = "https://dados.mobilidade.rio/gps/brt"
-    response = requests.get(url)
+    try:
+        response = requests.get(BRT_API_URL, timeout=10)
+        response.raise_for_status()
+        data = response.json()
 
-    if response.status_code != 200:
-        raise Exception(f"Erro ao acessar {url} - Código: {response.status_code}")
+        if not data:
+            logger.warning("API retornou uma resposta vazia.")
+            return pd.DataFrame()
 
-    data = response.json()
+        df = pd.DataFrame(data)
+        df['coleta_ts'] = datetime.now(timezone.utc)
+        return df
 
-    if not data:
-        raise ValueError("A resposta da API está vazia ou malformada.")
+    except RequestException as e:
+        logger.error(f"Erro ao acessar a API do BRT: {e}")
+        raise
 
-    df = pd.DataFrame(data)
-    df['coleta_ts'] = datetime.now(timezone.utc)
-
-    return df
+    except ValueError as e:
+        logger.error(f"Erro ao converter JSON: {e}")
+        raise

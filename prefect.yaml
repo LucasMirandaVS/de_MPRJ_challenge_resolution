@@ -1,0 +1,18 @@
+name: de_MPRJ_challenge
+prefect-version: 3.4.0
+
+deployments:
+- name: brt-api-pipeline
+  version: null
+  tags: []
+  description: Pipeline de captura e upload de dados do BRT minuto a minuto
+  schedule: {}  # você pode adicionar um agendamento depois, se quiser
+  flow_name: brt_pipeline
+  entrypoint: utils/brt_pipeline.py:brt_pipeline
+  parameters:
+    duration_min: 10
+  work_pool:
+    name: default-agent-pool
+    work_queue_name: null
+    job_variables: {}
+
