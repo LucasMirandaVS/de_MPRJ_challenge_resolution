@@ -29,7 +29,7 @@ graph TD;
     CSV --> GCS
     GCS --> BQ_Tabela
     BQ_Tabela --> BQ_View
-
+```
 
 
 ## Tecnologias Utilizadas
