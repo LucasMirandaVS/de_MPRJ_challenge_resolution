@@ -30,9 +30,21 @@ def brt_pipeline(duration_min: int = 10):
 
     final_df = pd.concat(all_data, ignore_index=True)
 
-    file_name = f"brt_data_{datetime.utcnow().strftime('%Y%m%d%H%M%S')}.csv"
-    os.makedirs(DATA_DIR, exist_ok=True)
-    file_path = os.path.join(DATA_DIR, file_name)
-    final_df.to_csv(file_path, index=False)
+    # Garantir que a coluna coleta_ts exista
+    if 'coleta_ts' not in final_df.columns:
+        logger.error("Coluna 'coleta_ts' não encontrada. Abortando salvamento.")
+        return
 
-    upload_to_gcs(GCS_BUCKET, file_path, f"brt_data/{file_name}")
+    # Particionar por data
+    final_df['coleta_data'] = pd.to_datetime(final_df['coleta_ts']).dt.date
+    os.makedirs(DATA_DIR, exist_ok=True)
+
+    for data_coleta in final_df['coleta_data'].unique():
+        df_particao = final_df[final_df['coleta_data'] == data_coleta].copy()
+        file_name = f"brt_data_{data_coleta}_{datetime.utcnow().strftime('%H%M%S')}.csv"
+        file_path = os.path.join(DATA_DIR, file_name)
+        df_particao.drop(columns=['coleta_data'], inplace=True)
+        df_particao.to_csv(file_path, index=False)
+
+        destino_gcs = f"brt_data/{data_coleta}/{file_name}"
+        upload_to_gcs(GCS_BUCKET, file_path, destino_gcs)

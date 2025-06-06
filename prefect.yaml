@@ -6,7 +6,7 @@ deployments:
   version: null
   tags: []
   description: Pipeline de captura e upload de dados do BRT minuto a minuto
-  schedule: {}  # você pode adicionar um agendamento depois, se quiser
+  schedule: {}  
   flow_name: brt_pipeline
   entrypoint: utils/brt_pipeline.py:brt_pipeline
   parameters:
